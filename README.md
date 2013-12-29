@@ -15,8 +15,6 @@ DataSaver plugin uses the jQuery JavaScript library, only. So, include just thes
 
 Select elements whose data you want to save.
 
-`<input type="text" id="field" class="saveme" />`
-
 `<textarea class="saveme"> </textarea>`
 
 After it, call the jQuery DataSaver plugin.
@@ -27,6 +25,8 @@ After it, call the jQuery DataSaver plugin.
 You can pass an options object in plugin init method.
 * **timeout** : Automatic save interval data (in milliseconds). If zero, it is not used (Default: 0);
 * **events** : List of events that cause data save. If "undefined" or "", it is not used (Default: "change").
+
+`$('.saveme').DataSaver({timeout: 1000, events: "change keyup"});`
 
 ### Methods:
 You can call some methods. Just pass their name.
