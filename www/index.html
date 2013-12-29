@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<meta name="author" content="Absent">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>DataSaver - jQuery plugin for save your data</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	<script src="jquery.DataSaver.js"></script>
+	
+	<style type="text/css">
+		body, html {padding: 0px; margin: 0px;}
+		a {color: #3366CC;}
+		.wrapper {width:900px; margin: 0 auto; font: normal normal 400 100%/1.5em georgia, serif; color: #222;}
+		.wrapper h1 {font: normal 600%/100% georgia, serif; text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.01); margin: 0 0 5px 0; text-align: center;}
+		.wrapper h2 {font: normal 200%/100% georgia, serif; text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.01); margin: 0 0 5px 0;}
+		.wrapper hr {border: none; border-top: 1px solid #ddd;}
+		.head p {font: normal 145%/1em georgia, serif; text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.01); text-align: center;}
+		.buttons a {display: inline-block;  background: #ddd; color: #111; width: 39.5%; margin: 0 5%; border-radius: 3px; text-align: center; line-height: 2.6em; text-decoration: none;}
+		.buttons a:hover {background: #3366CC; color: #fff;}
+		.buttons { clear: both; margin: 5px 0px 20px 0px; }
+		.wrapper pre {font: normal 87.5%/1.2em monospace, sans-serif; padding: 15px 30px 0px 30px; margin: 0; background: #eee; border-radius: 3px; display: block; overflow: auto;}
+		
+		.example {margin: 0px auto; border-left: 1px solid #ddd; padding-left: 20px;}
+		.example input[type=text] {width: 300px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;}
+		.example select {width: 250px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;}
+		.example textarea {width: 500px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;}
+
+    </style>
+	
+    <script type="text/javascript">
+		$(document).ready(function() {
+			$('.save').DataSaver();
+		});
+		
+    </script>
+	
+</head>
+<body>
+	<div class="wrapper">
+		<div class="head">
+			<h1>DataSaver</h1>
+			<p>jQuery plugin for save your data.</p>
+			<div class="buttons">
+				<a href="https://github.com/absentik/jMosaic/archive/master.zip">Download</a>
+				<a href="https://github.com/absentik/jMosaic">Github Page</a>
+			</div>
+		</div>
+		<br>
+		<h2>About</h2>
+		<p>The jQuery plugin allows you to save data from form fields in the web storage.</p>
+		<p>This saves users from  a situation when they lost all data entered into the form. This can happen due to a crash browser, disconnection, reload the page, etc.</p>
+		<br>
+		<h2>Browser Support:</h2>
+		<p>Plugin is supported in Internet Explorer 8+, Firefox 3.5+, Opera 10.5+, Chrome 4.0+, and Safari 4.0+.</p>
+		<br>
+		<h2>Usage</h2>
+		<p>DataSaver plugin uses the jQuery JavaScript library, only. So, include just these two javascript files in your header.</p>
+		<pre>
+&lt;script src="js/jquery.js"&gt;&lt;/script&gt;
+&lt;script src="js/jquery.DataSaver.js">&lt;/script&gt;
+		</pre>
+		<br>
+		<p>Select elements whose data you want to save.</p>
+		<pre>
+&lt;input type="text" id="field" class="saveme" /&gt; 
+&lt;textarea class="saveme"&gt; &lt;/textarea&gt;
+		</pre>
+		<br>
+		<p>After it, call the jQuery DataSaver plugin. </p>
+		<pre>
+$('.saveme').DataSaver();	
+		</pre>			
+		<br>
+		<h2>Options:</h2>
+		<p>You can pass an options object in plugin init method.</p>
+		<ul>
+			<li><b>timeout</b> : Automatic save interval data (in milliseconds). If zero, it is not used <i>(Default: 0)</i>;</li>
+			<li><b>events</b> : List of events that cause data save. If "undefined" or "", it is not used <i>(Default: "change")</i>.</li>
+		</ul>
+		<pre>
+$('.saveme').DataSaver({timeout: 1000, events: "change keyup"});
+		</pre>
+		<br>
+		<br>
+		<h2>Methods:</h2>
+		<p>You can call some methods. Just pass their name.</p>
+		<ul>
+			<li><b>save</b> : Save the data in web storage;</li>
+			<li><b>load</b> : Load the data from web storage;</li>
+			<li><b>remove</b> : Remove the data from web storage.</li>
+		</ul>
+		<pre>
+$('.saveme').DataSaver('remove');
+		</pre>
+		<br>
+		<br>
+		<h2>Example:</h2>
+		<div class="example">
+			<p><i>Fill and reload the page.</i></p>
+			<p>Name: <input type="text" id="name" name="name" class="save" /></p>
+			<p>Male: <input type="radio" name="gender" class="save" value="male"> Female: <input type="radio" name="gender" class="save" value="female"></p>
+			<p>Status: 
+				<select class="save">
+					<option></option>
+					<option value="1">Single</option>
+					<option value="2">Married</option>
+					<option value="3">Divorced</option>
+				</select>
+			</p>
+			<p>Pets: 
+				<input id="dog" type="checkbox" class="save" name="dog" checked />dog 
+				<input id="cat" type="checkbox" class="save" name="cat" />cat 
+				<input id="werewolf" type="checkbox" class="save" name="werewolf" />werewolf 
+			</p>
+			<p>About you: <br><textarea class="save" rows="5"></textarea></p>
+		</div>
+		<br>
+		<hr>
+		<p><a href="http://whoisabsent.ru" title="Created by" target="_blank">ABSENT</a>, 2014</p>
+	</div>
+</body>
+</html>

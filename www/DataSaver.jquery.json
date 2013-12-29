@@ -1,0 +1,31 @@
+{
+    "name": "DataSaver",
+    "title": "jQuery DataSaver",
+    "description": "jQuery plugin for save your data from form fields in the web storage.",
+    "keywords": [
+        "data",
+        "save",
+        "storage",
+        "localstorage",
+        "form",
+        "fields"
+    ],
+    "version": "0.0.1",
+    "author": {
+        "name": "Seleznev Alexander",
+        "email": "absenteg@gmail.com",
+        "url": "http://whoisabsent.ru"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/mit-license.php "
+        }
+    ],
+    "homepage": "https://github.com/absentik/DataSaver",
+    "docs": "https://github.com/absentik/DataSaver/wiki",
+    "bugs": "https://github.com/absentik/DataSaver/issues",
+    "dependencies": {
+        "jquery": ">=1.7"
+    }
+}
