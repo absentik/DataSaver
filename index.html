@@ -31,7 +31,15 @@
 	
     <script type="text/javascript">
 		$(document).ready(function() {
-			$('.save').DataSaver({events: "change keyup"});
+
+			//Save data for fields with class "save"
+			$("#example_form .save").DataSaver({events: "change keyup"});
+			
+			//Clear data after submit "example_form"
+			$("#example_form").on("submit", function() {
+				$('#example_form .save').DataSaver("remove");
+			});
+
 		});
 		
     </script>
@@ -89,33 +97,36 @@ $('.saveme').DataSaver({timeout: 1000, events: "change keyup"});
 		<ul>
 			<li><b>save</b> : Save the data in web storage;</li>
 			<li><b>load</b> : Load the data from web storage;</li>
-			<li><b>remove</b> : Remove the data from web storage.</li>
+			<li><b>remove</b> : Remove the data from web storage (For example, after submit the form).</li>
 		</ul>
 		<pre>
 $('.saveme').DataSaver('remove');
 		</pre>
 		<br>
 		<br>
-		<h2>Example:</h2>
-		<div class="example">
-			<p><i>Fill and reload the page.</i></p>
-			<p>Name: <input type="text" id="name" name="name" class="save" /></p>
-			<p>Male: <input type="radio" name="gender" class="save" value="male"> Female: <input type="radio" name="gender" class="save" value="female"></p>
-			<p>Status: 
-				<select class="save">
-					<option></option>
-					<option value="1">Single</option>
-					<option value="2">Married</option>
-					<option value="3">Divorced</option>
-				</select>
-			</p>
-			<p>Pets: 
-				<input id="dog" type="checkbox" class="save" name="dog" checked />dog 
-				<input id="cat" type="checkbox" class="save" name="cat" />cat 
-				<input id="werewolf" type="checkbox" class="save" name="werewolf" />werewolf 
-			</p>
-			<p>About you: <br><textarea class="save" rows="5"></textarea></p>
-		</div>
+		<form id="example_form" method="post">
+			<h2>Example:</h2>
+			<div class="example">
+				<p><i>Fill and reload the page.</i></p>
+				<p>Name: <input type="text" id="name" name="name" class="save" /></p>
+				<p>Male: <input type="radio" name="gender" class="save" value="male"> Female: <input type="radio" name="gender" class="save" value="female"></p>
+				<p>Status: 
+					<select class="save" name="status">
+						<option></option>
+						<option value="1">Single</option>
+						<option value="2">Married</option>
+						<option value="3">Divorced</option>
+					</select>
+				</p>
+				<p>Pets: 
+					<input id="dog" type="checkbox" class="save" name="dog" checked />dog 
+					<input id="cat" type="checkbox" class="save" name="cat" />cat 
+					<input id="werewolf" type="checkbox" class="save" name="werewolf" />werewolf 
+				</p>
+				<p>About you: <br><textarea class="save" rows="5"></textarea></p>
+				<p><input type="submit" value="Submit & Clear"><p>
+			</div>
+		</form>
 		<br>
 		<hr>
 		<p><a href="http://whoisabsent.ru" title="Created by" target="_blank">ABSENT</a>, 2014</p>

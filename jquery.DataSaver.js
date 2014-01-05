@@ -1,5 +1,5 @@
 /*
- * jQuery DataSaver plugin 0.0.1 
+ * jQuery DataSaver plugin 0.0.2 
  * 
  * Author: Seleznev Alexander (ABSENT) 
  * Email: absenteg@gmail.com 
@@ -20,28 +20,41 @@
 			}, options);
 			
 			return this.each(function(i, element){
-				start(element, settings.timeout, settings.events);
+				load(this);
+
+				if (typeof settings.events !== "undefined" && settings.events.length > 0) {
+					settings.events = settings.events.split(',').join(' ');
+					$(this).on(settings.events, function(e) {
+						save(this);
+					});
+				}
+
+				if (typeof settings.timeout === "number" && settings.timeout > 0) {
+					setInterval(function() {
+						save(this);
+					}, settings.timeout);
+				}
 			});
 		},
 
 		//Load data from localStorage
 		load : function() { 
 			return this.each(function(i, element){
-				load(element);
+				load(this);
 			});
 		},
 
 		//Save data in localStorage
 		save : function() { 
 			return this.each(function(i, element){
-				save(element);
+				save(this);
 			});
 		},
 
 		//Remove data in localStorage
 		remove : function() { 
 			return this.each(function(i, element){
-				remove(element);
+				remove(this);
 			});
 		}
 	};
@@ -60,53 +73,35 @@
 		}
 	};
 	
-	
-	
-	function start(selector, timeout, events) {
-		load(selector);
 
-		if (typeof events !== "undefined" && events.length > 0) {
-			events = events.split(',').join(' ');
-			$(selector).on(events, function(e) {
-				save(selector);
-			});
-		}
-
-		if (typeof timeout === "number" && timeout > 0) {
-			setInterval(function() {
-				save(selector);
-			}, timeout);
-		}
-	}
-
-	function save(selector) {
-		var key = getKey(selector);
+	function save(element) {
+		var key = getKey(element);
 		var val;
 
-		switch (selector.tagName) {
+		switch (element.tagName) {
 			case "INPUT":
-				var type = $(selector).attr("type").toUpperCase();
+				var type = $(element).attr("type").toUpperCase();
 				switch (type) {
 					case "CHECKBOX":
-						val = $(selector).prop('checked');
+						val = $(element).prop('checked');
 					break;
 
 					case "RADIO":
-						val = $(selector).val(); //keys for all radio[name] should match
+						val = $(element).val(); //keys for all radio[name] should match
 					break;
 
 					default:
-						val = $(selector).val();
+						val = $(element).val();
 					break;
 				}
 			break;
 
 			case "SELECT":
-				val = $(selector).val();
+				val = $(element).val();
 			break;
 
 			case "TEXTAREA":
-				val = $(selector).val();
+				val = $(element).val();
 			break;
 		}
 
@@ -115,69 +110,70 @@
 		}
 	}
 
-	function load(selector) {
-		var key = getKey(selector);
+	function load(element) {
+		var key = getKey(element);
 		var val = localStorage[key];
 
 		if (val != null) {
-			switch (selector.tagName) {
+			switch (element.tagName) {
 				case "INPUT":
-					var type = $(selector).attr("type").toUpperCase();
+					var type = $(element).attr("type").toUpperCase();
 					switch (type) {
 						case "CHECKBOX":
-							$(selector).prop('checked', (val === "true"));
+							$(element).prop('checked', (val === "true"));
 						break;
 
 						case "RADIO":
-							$("input[type=radio][name="+selector.name+"]" + "[value=" + val + "]").prop('checked', true);
+							$("input[type=radio][name="+element.name+"]" + "[value=" + val + "]").prop('checked', true);
 						break;
 
 						default:
-							$(selector).val(val);
+							$(element).val(val);
 						break;
 					}
 				break;
 
 				case "SELECT":
 					val = val.split(','); //for multiple select
-					$(selector).val(val);
+					$(element).val(val);
 				break;
 
 				case "TEXTAREA":
-					$(selector).val(val);
+					$(element).val(val);
 				break;
 			}
 		}
 	}
 
-	function remove(selector) {
-		var key = getKey(selector);
+	function remove(element) {
+		var key = getKey(element);
 		localStorage.removeItem(key);
 	}
 
 
 	//Generate or return storageKey for element
-	function getKey(selector) {
-		var key = selector.storageKey;
+	function getKey(element) {
+		var key = element.storageKey;
 		if (typeof key === "undefined") {
 			var url = {
 				host: window.location.host,
 				pathname: window.location.pathname
 			};
-			var element = {
-				tagName: selector.tagName, 
-				name: selector.name
+
+			var node = {
+				tagName: element.tagName, 
+				name: element.name
 			}
-			if ($(selector).is(":radio")) {
-				element.type = selector.type;
+			if ($(element).is(":input")) {
+				element.type = element.type;
 			}
-			else {
-				element.id = selector.id;
-				element.className = selector.className;
+			if (!$(element).is(":radio")) {
+				element.id = element.id;
+				element.className = element.className;
 			}
 
-			key = [pluginName, JSON.stringify(url), JSON.stringify(element)].join(".");
-			selector.storageKey = key;
+			key = [pluginName, JSON.stringify(url), JSON.stringify(node)].join(".");
+			element.storageKey = key;
 		}
 
 		return key;
