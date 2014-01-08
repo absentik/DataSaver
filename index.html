@@ -7,7 +7,7 @@
 
 	<title>DataSaver - jQuery plugin for save your data</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-	<script src="jquery.DataSaver.min.js"></script>
+	<script src="jquery.DataSaver.js"></script>
 	
 	<style type="text/css">
 		body, html {padding: 0px; margin: 0px;}
@@ -31,9 +31,13 @@
 	
     <script type="text/javascript">
 		$(document).ready(function() {
+			//Log DataSaver events
+			$(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e, storageKey) {
+				console.log(e.type + " (" + storageKey + ")");
+			});
 
 			//Save data for fields with class "save"
-			$("#example_form .save").DataSaver({events: "change keyup"});
+			$("#example_form .save").DataSaver({ events: "change keyup" });
 			
 			//Clear data after submit "example_form"
 			$("#example_form").on("submit", function() {
@@ -101,6 +105,20 @@ $('.saveme').DataSaver({timeout: 1000, events: "change keyup"});
 		</ul>
 		<pre>
 $('.saveme').DataSaver('remove');
+		</pre>
+		<br>
+		<br>
+		<h2>Events:</h2>
+		<p>You can listen DataSaver events.</p>
+		<ul>
+			<li>DataSaver_save</li>
+			<li>DataSaver_load</li>
+			<li>DataSaver_remove</li>
+		</ul>
+		<pre>
+$(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e, storageKey) {
+	console.log(e.type + " (" + storageKey + ")");
+});
 		</pre>
 		<br>
 		<br>

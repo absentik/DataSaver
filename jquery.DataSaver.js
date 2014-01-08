@@ -1,5 +1,5 @@
 /*
- * jQuery DataSaver plugin 0.0.2 
+ * jQuery DataSaver plugin 0.0.3 
  * 
  * Author: Seleznev Alexander (ABSENT) 
  * Email: absenteg@gmail.com 
@@ -20,18 +20,18 @@
 			}, options);
 			
 			return this.each(function(i, element){
-				load(this);
+				load(element);
 
 				if (typeof settings.events !== "undefined" && settings.events.length > 0) {
 					settings.events = settings.events.split(',').join(' ');
 					$(this).on(settings.events, function(e) {
-						save(this);
+						save(element);
 					});
 				}
 
 				if (typeof settings.timeout === "number" && settings.timeout > 0) {
 					setInterval(function() {
-						save(this);
+						save(element);
 					}, settings.timeout);
 				}
 			});
@@ -40,21 +40,21 @@
 		//Load data from localStorage
 		load : function() { 
 			return this.each(function(i, element){
-				load(this);
+				load(element);
 			});
 		},
 
 		//Save data in localStorage
 		save : function() { 
 			return this.each(function(i, element){
-				save(this);
+				save(element);
 			});
 		},
 
 		//Remove data in localStorage
 		remove : function() { 
 			return this.each(function(i, element){
-				remove(this);
+				remove(element);
 			});
 		}
 	};
@@ -107,6 +107,7 @@
 
 		if (typeof val !== "undefined") {
 			localStorage[key] = val;
+			$(element).trigger(pluginName + "_save", [ key ]);
 		}
 	}
 
@@ -142,12 +143,15 @@
 					$(element).val(val);
 				break;
 			}
+
+			$(element).trigger(pluginName + "_load", [ key ]);
 		}
 	}
 
 	function remove(element) {
 		var key = getKey(element);
 		localStorage.removeItem(key);
+		$(element).trigger(pluginName + "_remove", [ key ]);
 	}
 
 
@@ -165,11 +169,11 @@
 				name: element.name
 			}
 			if ($(element).is(":input")) {
-				element.type = element.type;
+				node.type = element.type;
 			}
 			if (!$(element).is(":radio")) {
-				element.id = element.id;
-				element.className = element.className;
+				node.id = element.id;
+				node.className = element.className;
 			}
 
 			key = [pluginName, JSON.stringify(url), JSON.stringify(node)].join(".");

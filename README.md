@@ -6,6 +6,9 @@ The jQuery plugin allows you to save data from form fields in the web storage.
 
 This saves users from  a situation when they lost all data entered into the form. This can happen due to a crash browser, disconnection, reload the page, etc.
 
+### Browser Support 
+Plugin is supported in Internet Explorer 8+, Firefox 3.5+, Opera 10.5+, Chrome 4.0+, and Safari 4.0+.
+
 ## USAGE
 DataSaver plugin uses the jQuery JavaScript library, only. So, include just these two javascript files in your header.
 
@@ -35,3 +38,9 @@ You can call some methods. Just pass their name.
 * **remove** : Remove the data from web storage. 
 
 `$('.saveme').DataSaver('remove');`
+
+### Events: 
+You can listen DataSaver events. 
+* DataSaver_save
+* DataSaver_load
+* DataSaver_remove
