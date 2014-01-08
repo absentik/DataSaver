@@ -14,7 +14,8 @@
 		a {color: #3366CC;}
 		.wrapper {width:900px; margin: 0 auto; font: normal normal 400 100%/1.5em georgia, serif; color: #222;}
 		.wrapper h1 {font: normal 600%/100% georgia, serif; text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.01); margin: 0 0 5px 0; text-align: center;}
-		.wrapper h2 {font: normal 200%/100% georgia, serif; text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.01); margin: 0 0 5px 0;}
+		.wrapper h2 {font: normal 200%/100% georgia, serif; text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.01); margin: 0 0 5px 0; text-transform: uppercase; }
+		.wrapper h3 {font: normal 150%/100% georgia, serif; text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.01); margin: 0 0 5px 0;}
 		.wrapper hr {border: none; border-top: 1px solid #ddd;}
 		.head p {font: normal 145%/1em georgia, serif; text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.01); text-align: center;}
 		.buttons a {display: inline-block;  background: #ddd; color: #111; width: 39.5%; margin: 0 5%; border-radius: 3px; text-align: center; line-height: 2.6em; text-decoration: none;}
@@ -64,7 +65,7 @@
 		<p>The jQuery plugin allows you to save data from form fields in the web storage.</p>
 		<p>This saves users from  a situation when they lost all data entered into the form. This can happen due to a crash browser, disconnection, reload the page, etc.</p>
 		<br>
-		<h2>Browser Support:</h2>
+		<h3>Browser Support:</h3>
 		<p>Plugin is supported in Internet Explorer 8+, Firefox 3.5+, Opera 10.5+, Chrome 4.0+, and Safari 4.0+.</p>
 		<br>
 		<h2>Usage</h2>
@@ -85,7 +86,7 @@
 $('.saveme').DataSaver();	
 		</pre>			
 		<br>
-		<h2>Options:</h2>
+		<h3>Options:</h3>
 		<p>You can pass an options object in plugin init method.</p>
 		<ul>
 			<li><b>timeout</b> : Automatic save interval data (in milliseconds). If zero, it is not used <i>(Default: 0)</i>;</li>
@@ -96,7 +97,7 @@ $('.saveme').DataSaver({timeout: 1000, events: "change keyup"});
 		</pre>
 		<br>
 		<br>
-		<h2>Methods:</h2>
+		<h3>Methods:</h3>
 		<p>You can call some methods. Just pass their name.</p>
 		<ul>
 			<li><b>save</b> : Save the data in web storage;</li>
@@ -108,7 +109,7 @@ $('.saveme').DataSaver('remove');
 		</pre>
 		<br>
 		<br>
-		<h2>Events:</h2>
+		<h3>Events:</h3>
 		<p>You can listen DataSaver events.</p>
 		<ul>
 			<li>DataSaver_save</li>
