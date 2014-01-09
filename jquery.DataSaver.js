@@ -1,5 +1,5 @@
 /*
- * jQuery DataSaver plugin 0.0.4 
+ * jQuery DataSaver plugin 0.0.5 
  * 
  * Author: Seleznev Alexander (ABSENT) 
  * Email: absenteg@gmail.com 
@@ -18,22 +18,31 @@
 				timeout: 0, 
 				events: "change"
 			}, options);
-			
+
 			return this.each(function(i, element){
 				load(element);
 
 				if (typeof settings.events !== "undefined" && settings.events.length > 0) {
 					settings.events = settings.events.split(',').join(' ');
-					$(this).on(settings.events, function(e) {
+					element[pluginName + "_events"] = settings.events;
+					$(document.body).on(settings.events, element, function() {
 						save(element);
 					});
 				}
 
 				if (typeof settings.timeout === "number" && settings.timeout > 0) {
-					setInterval(function() {
+					element[pluginName + "_timeout"] = setInterval(function() {
 						save(element);
 					}, settings.timeout);
 				}
+			});
+		},
+
+		//Stop the DataSaver
+		die : function() {
+			return this.each(function(i, element){
+				$(document.body).off(element[pluginName + "_events"]);
+				clearInterval(element[pluginName + "_timeout"]);
 			});
 		},
 
