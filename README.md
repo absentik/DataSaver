@@ -27,26 +27,26 @@ After it, call the jQuery DataSaver plugin.
 
 ### Options:
 You can pass an options object in plugin init method.
-* **timeout** : Automatic save interval data (in milliseconds). If zero, it is not used (Default: 0);
-* **events** : List of events that cause data save. If "undefined" or "", it is not used (Default: "change").
+* `timeout` : Automatic save interval data (in milliseconds). If zero, it is not used (Default: `0`);
+* `events` : List of events that cause data save. If `undefined` or `''`, it is not used (Default: `change`).
 
 <pre>$('.saveme').DataSaver({timeout: 1000, events: "change keyup"});</pre>
 
 ### Methods:
 You can call some methods. Just pass their name.
-* **save** : Save the data in web storage;
-* **load** : Load the data from web storage;
-* **remove** : Remove the data from web storage. 
+* `save` : Save the data in web storage;
+* `load` : Load the data from web storage;
+* `remove` : Remove the data from web storage. 
 
 <pre>$('.saveme').DataSaver('remove');</pre>
 
 ### Events: 
 You can listen DataSaver events. 
-* DataSaver_save
-* DataSaver_load
-* DataSaver_remove
+* `DataSaver_save`
+* `DataSaver_load`
+* `DataSaver_remove`
 
-You can also get localStorage key (**DataSaver_key**) and value: 
+You can also get localStorage key (`DataSaver_key`) and value: 
 
 <pre>
 $(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e) {
