@@ -1,5 +1,5 @@
 /*
- * jQuery DataSaver plugin 0.0.3 
+ * jQuery DataSaver plugin 0.0.4 
  * 
  * Author: Seleznev Alexander (ABSENT) 
  * Email: absenteg@gmail.com 
@@ -60,8 +60,8 @@
 	};
 	
 	$.fn.DataSaver = function(method) {
-		if (typeof(Storage)=== "undefined") {
-			$.error("Your browser doesn't support web storage.");
+		if (!('localStorage' in window && window['localStorage'] !== null)) {
+			$.error("Your browser doesn't support localStorage.");
 		}
 
 		if (methods[method]) {
@@ -107,8 +107,9 @@
 
 		if (typeof val !== "undefined") {
 			localStorage[key] = val;
-			$(element).trigger(pluginName + "_save", [ key ]);
 		}
+
+		$(element).trigger(pluginName + "_save");
 	}
 
 	function load(element) {
@@ -143,21 +144,22 @@
 					$(element).val(val);
 				break;
 			}
-
-			$(element).trigger(pluginName + "_load", [ key ]);
 		}
+
+		$(element).trigger(pluginName + "_load");
 	}
 
 	function remove(element) {
 		var key = getKey(element);
 		localStorage.removeItem(key);
-		$(element).trigger(pluginName + "_remove", [ key ]);
+		$(element).trigger(pluginName + "_remove");
 	}
 
 
-	//Generate or return storageKey for element
+	//Generate or return DataSaver_key for element
 	function getKey(element) {
-		var key = element.storageKey;
+		var keyName = pluginName + "_key";
+		var key = element[keyName];
 		if (typeof key === "undefined") {
 			var url = {
 				host: window.location.host,
@@ -177,7 +179,7 @@
 			}
 
 			key = [pluginName, JSON.stringify(url), JSON.stringify(node)].join(".");
-			element.storageKey = key;
+			element[keyName] = key;
 		}
 
 		return key;

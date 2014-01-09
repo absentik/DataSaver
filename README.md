@@ -44,3 +44,13 @@ You can listen DataSaver events.
 * DataSaver_save
 * DataSaver_load
 * DataSaver_remove
+
+You can also get localStorage key (**DataSaver_key**) and value: 
+`$(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e) {
+	console.log(e.type);
+	console.log(e.target.DataSaver_key + " : " + localStorage[e.target.DataSaver_key]);
+	console.log("");
+});`
+
+## EXAMPLE
+[View example](http://htmlpreview.github.io/?https://github.com/absentik/DataSaver/blob/master/index.html#example_form)

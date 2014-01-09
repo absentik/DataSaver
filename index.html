@@ -24,24 +24,27 @@
 		.wrapper pre {font: normal 87.5%/1.2em monospace, sans-serif; padding: 15px 30px 0px 30px; margin: 0; background: #eee; border-radius: 3px; display: block; overflow: auto;}
 		
 		.example {margin: 0px auto; border-left: 1px solid #ddd; padding-left: 20px;}
-		.example input[type=text] {width: 300px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;}
-		.example select {width: 250px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;}
-		.example textarea {width: 500px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;}
+		.example input[type=text], .example input[type=number], .example input[type=password] {width: 100px; padding: 5px; margin: 0px 10px 0px 0px; border: 1px solid #ddd; border-radius: 3px;}
+		.example input[type=date] {width: 150px; padding: 5px; margin: 0px 10px 0px 0px; border: 1px solid #ddd; border-radius: 3px;}
+		.example select {width: 350px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;}
+		.example textarea {width: 700px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;}
 
     </style>
 	
     <script type="text/javascript">
 		$(document).ready(function() {
-			//Log DataSaver events
-			$(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e, storageKey) {
-				console.log(e.type + " (" + storageKey + ")");
+			//Log DataSaver events (before DataSaver init!)
+			$(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e) {
+				console.log(e.type);
+				console.log(e.target.DataSaver_key + " : " + localStorage[e.target.DataSaver_key]);
+				console.log("");
 			});
 
 			//Save data for fields with class "save"
 			$("#example_form .save").DataSaver({ events: "change keyup" });
 			
-			//Clear data after submit "example_form"
-			$("#example_form").on("submit", function() {
+			//Clear data after submit or reset "example_form"
+			$("#example_form").on("submit reset", function() {
 				$('#example_form .save').DataSaver("remove");
 			});
 
@@ -116,9 +119,12 @@ $('.saveme').DataSaver('remove');
 			<li>DataSaver_load</li>
 			<li>DataSaver_remove</li>
 		</ul>
+		<p>You can also get localStorage key (<b>DataSaver_key</b>) and value:</p>
 		<pre>
-$(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e, storageKey) {
-	console.log(e.type + " (" + storageKey + ")");
+$(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e) {
+	console.log(e.type);
+	console.log(e.target.DataSaver_key + " : " + localStorage[e.target.DataSaver_key]);
+	console.log("");
 });
 		</pre>
 		<br>
@@ -127,23 +133,48 @@ $(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e, sto
 			<h2>Example:</h2>
 			<div class="example">
 				<p><i>Fill and reload the page.</i></p>
-				<p>Name: <input type="text" id="name" name="name" class="save" /></p>
-				<p>Male: <input type="radio" name="gender" class="save" value="male"> Female: <input type="radio" name="gender" class="save" value="female"></p>
-				<p>Status: 
-					<select class="save" name="status">
-						<option></option>
-						<option value="1">Single</option>
-						<option value="2">Married</option>
-						<option value="3">Divorced</option>
+				<p>Input: 
+					<input type="text" id="text" name="text" class="save" />
+					<input type="password" id="password" name="password" class="save" />
+					<input type="number" id="number" name="number" class="save" />
+					<input type="date" id="date" name="date" class="save" />
+					<input type="range" id="range" name="range" class="save" />
+				</p>
+				<p>Radio: 
+					<input type="radio" name="radio" class="save" value="one"> One 
+					<input type="radio" name="radio" class="save" value="two"> Two 
+					<input type="radio" name="radio" class="save" value="three"> Three
+				</p>
+				<p>Select: 
+					<select class="save" id="select" name="select">
+						<option selected="selected"></option>
+						<option value="1">Option 1</option>
+						<option value="2">Option 2</option>
+						<option value="3">Option 3</option>
+						<option value="4">Option 4</option>
 					</select>
 				</p>
-				<p>Pets: 
-					<input id="dog" type="checkbox" class="save" name="dog" checked />dog 
-					<input id="cat" type="checkbox" class="save" name="cat" />cat 
-					<input id="werewolf" type="checkbox" class="save" name="werewolf" />werewolf 
+				<p>Multiple select: <br>
+					<select class="save" id="select_multiple" name="select_multiple" multiple="multiple">
+						<option value="1">Option 1</option>
+						<option value="2" selected="selected">Option 2</option>
+						<option value="3" selected="selected">Option 3</option>
+						<option value="4">Option 4</option>
+						<option value="5">Option 5</option>
+					</select>
 				</p>
-				<p>About you: <br><textarea class="save" rows="5"></textarea></p>
-				<p><input type="submit" value="Submit & Clear"><p>
+				<p>Checkbox: 
+					<input id="check1" type="checkbox" class="save" name="check1" checked="checked" />Check  
+					<input id="check2" type="checkbox" class="save" name="check2" />Check  
+					<input id="check3" type="checkbox" class="save" name="check3" />Check  
+				</p>
+				<p>Textarea: <br>
+					<textarea class="save" rows="7"></textarea>
+				</p>
+				<p>
+					<input type="submit" value="Submit & Clear"> 
+					<input type="reset" value="Reset"> 
+				<p>
 			</div>
 		</form>
 		<br>
