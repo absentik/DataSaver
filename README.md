@@ -43,6 +43,8 @@ You can call some methods. Just pass their name.
 
 ### Events: 
 You can listen DataSaver events. 
+* `DataSaver_start`
+* `DataSaver_stop`
 * `DataSaver_save`
 * `DataSaver_load`
 * `DataSaver_remove`

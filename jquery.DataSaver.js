@@ -1,5 +1,6 @@
 /*
- * jQuery DataSaver plugin 0.0.5 
+ * jQuery DataSaver plugin 0.1.0 
+ * https://github.com/absentik/DataSaver
  * 
  * Author: Seleznev Alexander (ABSENT) 
  * Email: absenteg@gmail.com 
@@ -9,108 +10,121 @@
  * http://www.opensource.org/licenses/mit-license.php 
  */
 
-(function($){
-	
+;(function($, window, document, undefined){
+
 	var pluginName = "DataSaver";
-	var methods = {
-		init : function(options) { 
-			var settings = $.extend({ 
-				timeout: 0, 
-				events: "change"
-			}, options);
-
-			return this.each(function(i, element){
-				load(element);
-
-				if (typeof settings.events !== "undefined" && settings.events.length > 0) {
-					settings.events = settings.events.split(',').join(' ');
-					element[pluginName + "_events"] = settings.events;
-					$(document.body).on(settings.events, element, function() {
-						save(element);
-					});
-				}
-
-				if (typeof settings.timeout === "number" && settings.timeout > 0) {
-					element[pluginName + "_timeout"] = setInterval(function() {
-						save(element);
-					}, settings.timeout);
-				}
-			});
-		},
-
-		//Stop the DataSaver
-		die : function() {
-			return this.each(function(i, element){
-				$(document.body).off(element[pluginName + "_events"]);
-				clearInterval(element[pluginName + "_timeout"]);
-			});
-		},
-
-		//Load data from localStorage
-		load : function() { 
-			return this.each(function(i, element){
-				load(element);
-			});
-		},
-
-		//Save data in localStorage
-		save : function() { 
-			return this.each(function(i, element){
-				save(element);
-			});
-		},
-
-		//Remove data in localStorage
-		remove : function() { 
-			return this.each(function(i, element){
-				remove(element);
-			});
-		}
-	};
+	var defaults = {
+		timeout: 0, 
+		events: "change"
+	}
 	
-	$.fn.DataSaver = function(method) {
-		if (!('localStorage' in window && window['localStorage'] !== null)) {
-			$.error("Your browser doesn't support localStorage.");
-		}
+	function DataSaver(element, options) {
+		this.element = element;
+		this._defaults = defaults;
+		this._name = pluginName;
+		this.options = $.extend({}, defaults, options);
+		this.action = typeof options === "string" ? options : "default";
+		
+		this.getkey();
+		this.init();
+	}
 
-		if (methods[method]) {
-			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-		} else if (typeof method === 'object' || !method) {
-			return methods.init.apply(this, arguments);
-		} else {
-			$.error('Method "' +  method + '" does not exist on ' + pluginName + '.');
+	//Generate and return DataSaver_key for element
+	DataSaver.prototype.getkey = function () {
+		var keyName = pluginName + "_key";
+		var key = this.element[keyName];
+
+		if (typeof key === "undefined") {
+			var url = {
+				host: window.location.host,
+				pathname: window.location.pathname
+			};
+			var node = {
+				tagName: this.element.tagName, 
+				name: this.element.name
+			}
+			if ($(this.element).is(":input")) {
+				node.type = this.element.type;
+			}
+			if (!$(this.element).is(":radio")) {
+				node.id = this.element.id;
+				node.className = this.element.className;
+			}
+
+			key = [pluginName, JSON.stringify(url), JSON.stringify(node)].join(".");
+			this.element[keyName] = key;
 		}
+		
+		return key;
 	};
-	
 
-	function save(element) {
-		var key = getKey(element);
+	//Load data from localStorage
+	DataSaver.prototype.load = function () {
+		var key = this.getkey();
+		var val = localStorage[key];
+
+		if (val != null) {
+			switch (this.element.tagName) {
+				case "INPUT":
+					var type = $(this.element).attr("type").toUpperCase();
+					switch (type) {
+						case "CHECKBOX":
+							$(this.element).prop('checked', (val === "true"));
+						break;
+
+						case "RADIO":
+							$("input[type=radio][name=" + this.element.name + "]" + "[value=" + val + "]").prop('checked', true);
+						break;
+
+						default:
+							$(this.element).val(val);
+						break;
+					}
+				break;
+
+				case "SELECT":
+					val = val.split(','); //for multiple select
+					$(this.element).val(val);
+				break;
+
+				case "TEXTAREA":
+					$(this.element).val(val);
+				break;
+			}
+		}
+
+		return $(this.element).trigger(pluginName + "_load");
+	};
+
+	//Save data in localStorage
+	DataSaver.prototype.save = function () {
+		var key = this.getkey();
 		var val;
 
-		switch (element.tagName) {
+		switch (this.element.tagName) {
 			case "INPUT":
-				var type = $(element).attr("type").toUpperCase();
+				var type = $(this.element).attr("type").toUpperCase();
 				switch (type) {
 					case "CHECKBOX":
-						val = $(element).prop('checked');
+						val = $(this.element).prop('checked');
 					break;
 
 					case "RADIO":
-						val = $(element).val(); //keys for all radio[name] should match
+						val = $(this.element).val(); //keys for all radio[name] should match
 					break;
 
 					default:
-						val = $(element).val();
+						val = $(this.element).val();
 					break;
 				}
 			break;
 
 			case "SELECT":
-				val = $(element).val();
+				val = $(this.element).val();
 			break;
 
 			case "TEXTAREA":
-				val = $(element).val();
+				val = $(this.element).val();
 			break;
 		}
 
@@ -118,80 +132,85 @@
 			localStorage[key] = val;
 		}
 
-		$(element).trigger(pluginName + "_save");
-	}
+		return $(this.element).trigger(pluginName + "_save");
+	};
 
-	function load(element) {
-		var key = getKey(element);
-		var val = localStorage[key];
-
-		if (val != null) {
-			switch (element.tagName) {
-				case "INPUT":
-					var type = $(element).attr("type").toUpperCase();
-					switch (type) {
-						case "CHECKBOX":
-							$(element).prop('checked', (val === "true"));
-						break;
-
-						case "RADIO":
-							$("input[type=radio][name="+element.name+"]" + "[value=" + val + "]").prop('checked', true);
-						break;
-
-						default:
-							$(element).val(val);
-						break;
-					}
-				break;
-
-				case "SELECT":
-					val = val.split(','); //for multiple select
-					$(element).val(val);
-				break;
-
-				case "TEXTAREA":
-					$(element).val(val);
-				break;
-			}
-		}
-
-		$(element).trigger(pluginName + "_load");
-	}
-
-	function remove(element) {
-		var key = getKey(element);
+	//Remove data in localStorage
+	DataSaver.prototype.remove = function () {
+		var key = this.getkey();
 		localStorage.removeItem(key);
-		$(element).trigger(pluginName + "_remove");
-	}
 
+		return $(this.element).trigger(pluginName + "_remove");
+	};
 
-	//Generate or return DataSaver_key for element
-	function getKey(element) {
-		var keyName = pluginName + "_key";
-		var key = element[keyName];
-		if (typeof key === "undefined") {
-			var url = {
-				host: window.location.host,
-				pathname: window.location.pathname
-			};
-
-			var node = {
-				tagName: element.tagName, 
-				name: element.name
-			}
-			if ($(element).is(":input")) {
-				node.type = element.type;
-			}
-			if (!$(element).is(":radio")) {
-				node.id = element.id;
-				node.className = element.className;
-			}
-
-			key = [pluginName, JSON.stringify(url), JSON.stringify(node)].join(".");
-			element[keyName] = key;
+	//Start the DataSaver: load data and bind actions
+	DataSaver.prototype.start = function () {
+		var it = this;
+		this.stop();
+		this.load();
+		
+		if (typeof this.options.events !== "undefined" && this.options.events.length > 0) {
+			this.options.events = this.options.events.split(',').join(' ');
+			this.element[pluginName + "_events"] = this.options.events;
+			//$(document.body).on(this.options.events, this.element, function() {
+			$(this.element).on(this.options.events, function() {
+				it.save();
+			});
 		}
 
-		return key;
+		if (typeof this.options.timeout === "number" && this.options.timeout > 0) {
+			this.element[pluginName + "_timeout"] = setInterval(function() {
+				it.save();
+			}, this.options.timeout);
+		}
+
+		return $(this.element).trigger(pluginName + "_start");
+	};
+
+	//Stop the DataSaver: unbind actions
+	DataSaver.prototype.stop = function () {
+		if (typeof this.element[pluginName + "_events"] !== "undefined") {
+			$(document.body).off(this.element[pluginName + "_events"]);
+		}
+		if (typeof this.element[pluginName + "_timeout"] !== "undefined") {
+			clearInterval(this.element[pluginName + "_timeout"]);
+		}
+
+		return $(this.element).trigger(pluginName + "_stop");
+	};
+
+
+	DataSaver.prototype.init = function () {
+		switch (this.action) {
+			case "load":
+				return this.load();
+			break;
+			case "save":
+				return this.save();
+			break;
+			case "remove":
+				return this.remove();
+			break;
+			case "stop":
+				return this.stop();
+			break;
+			default:
+				return this.start();
+			break;
+		}
+	};
+
+
+	$.fn[pluginName] = function (options) {
+		if (!('localStorage' in window && window['localStorage'] !== null)) {
+			$.error("Your browser doesn't support localStorage.");
+		}
+
+		return this.each(function () {
+			if (!$.data(this, 'plugin_' + pluginName) || typeof options === "string") {
+				$.data(this, 'plugin_' + pluginName, new DataSaver(this, options));
+			}
+		});
 	}
-	
-})(jQuery);
+
+})(jQuery, window, document);

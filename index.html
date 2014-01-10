@@ -7,7 +7,7 @@
 
 	<title>DataSaver - jQuery plugin for save your data</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-	<script src="jquery.DataSaver.js"></script>
+	<script src="jquery.DataSaver.min.js"></script>
 	
 	<style type="text/css">
 		body, html {padding: 0px; margin: 0px;}
@@ -33,11 +33,11 @@
 	
     <script type="text/javascript">
 		$(document).ready(function() {
-			//Log DataSaver events (before DataSaver init!)
-			$(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e) {
+			//Log DataSaver events (before DataSaver start!)
+			$(document).on("DataSaver_start DataSaver_stop DataSaver_save DataSaver_load DataSaver_remove", function(e) {
 				console.log(e.type);
-				console.log(e.target.DataSaver_key + " : " + localStorage[e.target.DataSaver_key]);
-				console.log("");
+				//console.log(e.target.DataSaver_key + " : " + localStorage[e.target.DataSaver_key]);
+				//console.log("");
 			});
 
 			//Save data for fields with class "save"
@@ -106,7 +106,7 @@ $('.saveme').DataSaver({timeout: 1000, events: "change keyup"});
 			<li><b>save</b> : Save the data in web storage;</li>
 			<li><b>load</b> : Load the data from web storage;</li>
 			<li><b>remove</b> : Remove the data from web storage (For example, after submit the form);</li>
-			<li><b>die</b> : Stop the DataSaver.</li>
+			<li><b>stop</b> : Stop the DataSaver.</li>
 		</ul>
 		<pre>
 $('.saveme').DataSaver('remove');
@@ -116,6 +116,8 @@ $('.saveme').DataSaver('remove');
 		<h3>Events:</h3>
 		<p>You can listen DataSaver events.</p>
 		<ul>
+			<li>DataSaver_start</li>
+			<li>DataSaver_stop</li>
 			<li>DataSaver_save</li>
 			<li>DataSaver_load</li>
 			<li>DataSaver_remove</li>
