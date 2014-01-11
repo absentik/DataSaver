@@ -37,7 +37,7 @@ You can call some methods. Just pass their name.
 * `save` : Save the data in web storage;
 * `load` : Load the data from web storage;
 * `remove` : Remove the data from web storage; 
-* `die` : Stop the DataSaver. 
+* `stop` : Stop the DataSaver. 
 
 <pre>$('.saveme').DataSaver('remove');</pre>
 
