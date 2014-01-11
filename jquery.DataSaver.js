@@ -1,5 +1,5 @@
 /*
- * jQuery DataSaver plugin 0.1.0 
+ * jQuery DataSaver plugin 0.1.1 
  * https://github.com/absentik/DataSaver
  * 
  * Author: Seleznev Alexander (ABSENT) 
@@ -30,7 +30,7 @@
 	}
 
 	//Generate and return DataSaver_key for element
-	DataSaver.prototype.getkey = function () {
+	DataSaver.prototype.getkey = function() {
 		var keyName = pluginName + "_key";
 		var key = this.element[keyName];
 
@@ -59,7 +59,7 @@
 	};
 
 	//Load data from localStorage
-	DataSaver.prototype.load = function () {
+	DataSaver.prototype.load = function() {
 		var key = this.getkey();
 		var val = localStorage[key];
 
@@ -97,7 +97,7 @@
 	};
 
 	//Save data in localStorage
-	DataSaver.prototype.save = function () {
+	DataSaver.prototype.save = function() {
 		var key = this.getkey();
 		var val;
 
@@ -136,7 +136,7 @@
 	};
 
 	//Remove data in localStorage
-	DataSaver.prototype.remove = function () {
+	DataSaver.prototype.remove = function() {
 		var key = this.getkey();
 		localStorage.removeItem(key);
 
@@ -144,7 +144,7 @@
 	};
 
 	//Start the DataSaver: load data and bind actions
-	DataSaver.prototype.start = function () {
+	DataSaver.prototype.start = function() {
 		var it = this;
 		this.stop();
 		this.load();
@@ -168,7 +168,7 @@
 	};
 
 	//Stop the DataSaver: unbind actions
-	DataSaver.prototype.stop = function () {
+	DataSaver.prototype.stop = function() {
 		if (typeof this.element[pluginName + "_events"] !== "undefined") {
 			$(document.body).off(this.element[pluginName + "_events"]);
 		}
@@ -180,7 +180,7 @@
 	};
 
 
-	DataSaver.prototype.init = function () {
+	DataSaver.prototype.init = function() {
 		switch (this.action) {
 			case "load":
 				return this.load();
@@ -207,9 +207,7 @@
 		}
 
 		return this.each(function () {
-			if (!$.data(this, 'plugin_' + pluginName) || typeof options === "string") {
-				$.data(this, 'plugin_' + pluginName, new DataSaver(this, options));
-			}
+			$.data(this, 'plugin_' + pluginName, new DataSaver(this, options));
 		});
 	}
 
