@@ -16,8 +16,8 @@
 	var defaults = {
 		timeout: 0,
 		events: "change",
-    keyUrlAttrs: ['host', 'pathname'],
-    keyExtra: function(){return ''}
+		keyUrlAttrs: ['host', 'pathname'],
+		keyExtra: function(){return ''}
 	}
 
 	function DataSaver(element, options) {
