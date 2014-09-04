@@ -1,13 +1,13 @@
 /*
- * jQuery DataSaver plugin 0.1.1 
+ * jQuery DataSaver plugin 0.1.1
  * https://github.com/absentik/DataSaver
- * 
- * Author: Seleznev Alexander (ABSENT) 
- * Email: absenteg@gmail.com 
- * Website: http://whoisabsent.ru 
- *  
- * Licensed under the MIT license. 
- * http://www.opensource.org/licenses/mit-license.php 
+ *
+ * Author: Seleznev Alexander (ABSENT)
+ * Email: absenteg@gmail.com
+ * Website: http://whoisabsent.ru
+ *
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
  */
 
 ;(function($, window, document, undefined){
@@ -16,7 +16,8 @@
 	var defaults = {
 		timeout: 0,
 		events: "change",
-    urlAttrs: ['host', 'pathname']
+    keyUrlAttrs: ['host', 'pathname'],
+    keyExtra: function(){return ''}
 	}
 
 	function DataSaver(element, options) {
@@ -37,7 +38,7 @@
 
 		if (typeof key === "undefined") {
 			var url = {};
-			$.each(this.options.urlAttrs, function(index, value){
+			$.each(this.options.keyUrlAttrs, function(index, value){
 				url[value] = window.location[value];
 			})
 
@@ -53,10 +54,10 @@
 				node.className = this.element.className;
 			}
 
-			key = [pluginName, JSON.stringify(url), JSON.stringify(node)].join(".");
+			key = [pluginName, JSON.stringify(url), JSON.stringify(node),this.options.keyExtra()].join(".");
 			this.element[keyName] = key;
 		}
-		
+
 		return key;
 	};
 
@@ -150,7 +151,7 @@
 		var it = this;
 		this.stop();
 		this.load();
-		
+
 		if (typeof this.options.events !== "undefined" && this.options.events.length > 0) {
 			this.options.events = this.options.events.split(',').join(' ');
 			this.element[pluginName + "_events"] = this.options.events;
