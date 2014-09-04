@@ -14,17 +14,18 @@
 
 	var pluginName = "DataSaver";
 	var defaults = {
-		timeout: 0, 
-		events: "change"
+		timeout: 0,
+		events: "change",
+    urlAttrs: ['host', 'pathname']
 	}
-	
+
 	function DataSaver(element, options) {
 		this.element = element;
 		this._defaults = defaults;
 		this._name = pluginName;
 		this.options = $.extend({}, defaults, options);
 		this.action = typeof options === "string" ? options : "default";
-		
+
 		this.getkey();
 		this.init();
 	}
@@ -35,12 +36,13 @@
 		var key = this.element[keyName];
 
 		if (typeof key === "undefined") {
-			var url = {
-				host: window.location.host,
-				pathname: window.location.pathname
-			};
+			var url = {};
+			$.each(this.options.urlAttrs, function(index, value){
+				url[value] = window.location[value];
+			})
+
 			var node = {
-				tagName: this.element.tagName, 
+				tagName: this.element.tagName,
 				name: this.element.name
 			}
 			if ($(this.element).is(":input")) {
