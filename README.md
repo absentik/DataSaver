@@ -28,7 +28,9 @@ After it, call the jQuery DataSaver plugin.
 ### Options:
 You can pass an options object in plugin init method.
 * `timeout` : Automatic save interval data (in milliseconds). If zero, it is not used (Default: `0`);
-* `events` : List of events that cause data save. If `undefined` or `''`, it is not used (Default: `change`).
+* `events` : List of events that cause data save. If `undefined` or `''`, it is not used (Default: `change`);
+* `keyUrlAttrs` : Array of properties `window.location` object for building key (Default: `["host", "pathname"]`);
+* `keyExtra` : Function that return a string that is used for building key (Default: `function() { return ""; }`);
 
 <pre>$('.saveme').DataSaver({timeout: 1000, events: "change keyup"});</pre>
 
