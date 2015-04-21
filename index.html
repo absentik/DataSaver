@@ -55,7 +55,7 @@
 				}
 			});
 			$("#example_form #parrent").on("change", function() {
-				$("#example_form #child").DataSaver("load");
+				$("#example_form #child").val("").DataSaver("load");
 			});
 			
 			//Clear data after submit or reset "example_form"
@@ -201,7 +201,6 @@ $(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e) {
 				<p>Linked fields: 
 					<select id="parrent" name="parrent_select">
 						<option selected disabled>This element is not saved</option>
-						<option></option>
 						<option value="1">Option 1</option>
 						<option value="2">Option 2</option>
 						<option value="3">Option 3</option>
