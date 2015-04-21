@@ -16,8 +16,10 @@
 	var defaults = {
 		timeout: 0,
 		events: "change",
-		keyUrlAttrs: ['host', 'pathname'],
-		keyExtra: function(){return ''}
+		keyUrlAttrs: ["host", "pathname"],
+		keyExtra: function() { 
+			return "";
+		}
 	}
 
 	function DataSaver(element, options) {
@@ -39,8 +41,10 @@
 		if (typeof key === "undefined") {
 			var url = {};
 			$.each(this.options.keyUrlAttrs, function(index, value){
-				url[value] = window.location[value];
-			})
+				if (window.location.hasOwnProperty(value)) {
+					url[value] = window.location[value];
+				}
+			});
 
 			var node = {
 				tagName: this.element.tagName,
@@ -54,7 +58,7 @@
 				node.className = this.element.className;
 			}
 
-			key = [pluginName, JSON.stringify(url), JSON.stringify(node),this.options.keyExtra()].join(".");
+			key = [pluginName, JSON.stringify(url), JSON.stringify(node), this.options.keyExtra()].join(".");
 			this.element[keyName] = key;
 		}
 
