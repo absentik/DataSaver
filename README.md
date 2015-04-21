@@ -32,7 +32,16 @@ You can pass an options object in plugin init method.
 * `keyUrlAttrs` : Array of properties `window.location` object for building key (Default: `["host", "pathname"]`);
 * `keyExtra` : Function that return a string that is used for building key (Default: `function() { return ""; }`);
 
-<pre>$('.saveme').DataSaver({timeout: 1000, events: "change keyup"});</pre>
+<pre>
+$('.saveme').DataSaver({
+	timeout: 1000, 
+	events: "change keyup",
+	keyUrlAttrs: ["host", "pathname", "search"],
+	keyExtra: function() { 
+		return $("#linkedfield").val(); 
+	}
+});
+</pre>
 
 ### Methods:
 You can call some methods. Just pass their name.
