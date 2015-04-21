@@ -54,6 +54,9 @@
 					return $("#example_form #parrent").val(); 
 				}
 			});
+			$("#example_form #parrent").on("change", function() {
+				$("#example_form #child").DataSaver("load");
+			});
 			
 			//Clear data after submit or reset "example_form"
 			$("#example_form").on("submit reset", function() {
