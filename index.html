@@ -196,8 +196,9 @@ $(document).on("DataSaver_save DataSaver_load DataSaver_remove", function(e) {
 					<textarea class="save" rows="7"></textarea>
 				</p>
 				<p>Linked fields: 
-					<select class="save" id="parrent" name="parrent_select">
-						<option selected="selected"></option>
+					<select id="parrent" name="parrent_select">
+						<option selected disabled>This element is not saved</option>
+						<option></option>
 						<option value="1">Option 1</option>
 						<option value="2">Option 2</option>
 						<option value="3">Option 3</option>
