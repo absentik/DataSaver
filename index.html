@@ -93,10 +93,19 @@ $('.saveme').DataSaver();
 		<p>You can pass an options object in plugin init method.</p>
 		<ul>
 			<li><b>timeout</b> : Automatic save interval data (in milliseconds). If zero, it is not used <i>(Default: 0)</i>;</li>
-			<li><b>events</b> : List of events that cause data save. If "undefined" or "", it is not used <i>(Default: "change")</i>.</li>
+			<li><b>events</b> : List of events that cause data save. If "undefined" or "", it is not used <i>(Default: "change")</i>;</li>
+			<li><b>keyUrlAttrs</b> : Array of properties "window.location" object for building key <i>(Default: ["host", "pathname"])</i>;</li>
+			<li><b>keyExtra</b> : Function that return a string that is used for building key <i>(Default: function() { return ""; })</i>.</li>
 		</ul>
 		<pre>
-$('.saveme').DataSaver({timeout: 1000, events: "change keyup"});
+$('.saveme').DataSaver({
+    timeout: 1000, 
+    events: "change keyup",
+    keyUrlAttrs: ["host", "pathname", "search"],
+    keyExtra: function() { 
+        return $('#linkedfield').val(); 
+    }
+});
 		</pre>
 		<br>
 		<br>
