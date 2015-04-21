@@ -1,30 +1,32 @@
 /*
- * jQuery DataSaver plugin 0.1.1 
+ * jQuery DataSaver plugin 0.1.1
  * https://github.com/absentik/DataSaver
- * 
- * Author: Seleznev Alexander (ABSENT) 
- * Email: absenteg@gmail.com 
- * Website: http://whoisabsent.ru 
- *  
- * Licensed under the MIT license. 
- * http://www.opensource.org/licenses/mit-license.php 
+ *
+ * Author: Seleznev Alexander (ABSENT)
+ * Email: absenteg@gmail.com
+ * Website: http://whoisabsent.ru
+ *
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
  */
 
 ;(function($, window, document, undefined){
 
 	var pluginName = "DataSaver";
 	var defaults = {
-		timeout: 0, 
-		events: "change"
+		timeout: 0,
+		events: "change",
+		keyUrlAttrs: ['host', 'pathname'],
+		keyExtra: function(){return ''}
 	}
-	
+
 	function DataSaver(element, options) {
 		this.element = element;
 		this._defaults = defaults;
 		this._name = pluginName;
 		this.options = $.extend({}, defaults, options);
 		this.action = typeof options === "string" ? options : "default";
-		
+
 		this.getkey();
 		this.init();
 	}
@@ -35,12 +37,13 @@
 		var key = this.element[keyName];
 
 		if (typeof key === "undefined") {
-			var url = {
-				host: window.location.host,
-				pathname: window.location.pathname
-			};
+			var url = {};
+			$.each(this.options.keyUrlAttrs, function(index, value){
+				url[value] = window.location[value];
+			})
+
 			var node = {
-				tagName: this.element.tagName, 
+				tagName: this.element.tagName,
 				name: this.element.name
 			}
 			if ($(this.element).is(":input")) {
@@ -51,10 +54,10 @@
 				node.className = this.element.className;
 			}
 
-			key = [pluginName, JSON.stringify(url), JSON.stringify(node)].join(".");
+			key = [pluginName, JSON.stringify(url), JSON.stringify(node),this.options.keyExtra()].join(".");
 			this.element[keyName] = key;
 		}
-		
+
 		return key;
 	};
 
@@ -148,7 +151,7 @@
 		var it = this;
 		this.stop();
 		this.load();
-		
+
 		if (typeof this.options.events !== "undefined" && this.options.events.length > 0) {
 			this.options.events = this.options.events.split(',').join(' ');
 			this.element[pluginName + "_events"] = this.options.events;
