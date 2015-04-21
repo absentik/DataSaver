@@ -1,5 +1,5 @@
 /*
- * jQuery DataSaver plugin 0.1.1
+ * jQuery DataSaver plugin 0.1.2
  * https://github.com/absentik/DataSaver
  *
  * Author: Seleznev Alexander (ABSENT)
