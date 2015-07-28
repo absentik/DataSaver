@@ -40,6 +40,8 @@
 
 		if (typeof key === "undefined") {
 			var url = {};
+			window.location.hasOwnProperty = window.location.hasOwnProperty || Object.prototype.hasOwnProperty;
+
 			$.each(this.options.keyUrlAttrs, function(index, value){
 				if (window.location.hasOwnProperty(value)) {
 					url[value] = window.location[value];
