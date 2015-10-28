@@ -14,6 +14,7 @@
 
 	var pluginName = "DataSaver";
 	var defaults = {
+		useSessionStorage: false,
 		timeout: 0,
 		events: "change",
 		keyUrlAttrs: ["host", "pathname"],
@@ -65,10 +66,16 @@
 		return key;
 	};
 
-	//Load data from localStorage
+	//Load data from localStorage or sessionStorage
 	DataSaver.prototype.load = function() {
 		var key = this.getkey();
-		var val = localStorage[key];
+		var val;
+
+		if (this.options.useSessionStorage) {
+			val = sessionStorage[key];
+		} else {
+			val = localStorage[key];
+		}
 
 		if (val != null) {
 			switch (this.element.tagName) {
@@ -103,7 +110,7 @@
 		return $(this.element).trigger(pluginName + "_load");
 	};
 
-	//Save data in localStorage
+	//Save data in localStorage or sessionStorage
 	DataSaver.prototype.save = function() {
 		var key = this.getkey();
 		var val;
@@ -136,16 +143,25 @@
 		}
 
 		if (typeof val !== "undefined") {
-			localStorage[key] = val;
+			if (this.options.useSessionStorage) {
+				sessionStorage[key] = val;
+			} else {
+				localStorage[key] = val;
+			}
 		}
 
 		return $(this.element).trigger(pluginName + "_save");
 	};
 
-	//Remove data in localStorage
+	//Remove data in localStorage or sessionStorage
 	DataSaver.prototype.remove = function() {
 		var key = this.getkey();
-		localStorage.removeItem(key);
+
+		if (this.options.useSessionStorage) {
+			sessionStorage.removeItem(key);
+		} else {
+			localStorage.removeItem(key);
+		}
 
 		return $(this.element).trigger(pluginName + "_remove");
 	};
@@ -209,8 +225,8 @@
 
 
 	$.fn[pluginName] = function (options) {
-		if (!('localStorage' in window && window['localStorage'] !== null)) {
-			$.error("Your browser doesn't support localStorage.");
+		if (!('localStorage' in window && window['localStorage'] !== null) || !('sessionStorage' in window && window['sessionStorage'] !== null)) {
+			$.error("Your browser doesn't support localStorage and/or sessionStorage.");
 		}
 
 		return this.each(function () {
